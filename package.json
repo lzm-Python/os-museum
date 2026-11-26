@@ -1,0 +1,52 @@
+{
+  "name": "os-museum",
+  "productName": "世界操作系统全史博物馆",
+  "version": "1.0.0",
+  "description": "World OS History Museum - a clickable museum of operating systems",
+  "main": "main.js",
+  "author": "OS Museum",
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win nsis",
+    "dist:portable": "electron-builder --win portable"
+  },
+  "devDependencies": {
+    "electron": "^33.2.0",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.osmuseum.history",
+    "productName": "世界操作系统全史博物馆",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "src/**/*",
+      "data/**/*",
+      "assets/**/*"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "世界操作系统全史博物馆",
+      "language": "2052",
+      "installerLanguages": ["zh_CN"],
+      "multiLanguageInstaller": false
+    }
+  }
+}

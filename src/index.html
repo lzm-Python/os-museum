@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self';" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>世界操作系统全史博物馆</title>
+  <link rel="stylesheet" href="styles/base.css" />
+  <link rel="stylesheet" href="styles/shells.css" />
+  <link rel="stylesheet" href="styles/skins.css" />
+</head>
+<body class="booting">
+
+  <div id="lobby" class="lobby">
+    <header class="lobby-head">
+      <div class="brand">
+        <div class="brand-logo logo-only" id="brandLogo"></div>
+        <div class="brand-text">
+          <h1>世界操作系统全史博物馆</h1>
+          <p class="brand-sub">1979 — 2024 · <span id="countText">46</span> 台机器 · 点开任意一台，它就会开机</p>
+        </div>
+      </div>
+      <div class="head-right">
+        <div class="search-wrap">
+          <input id="searchInput" type="text" placeholder="搜索系统、厂商、年份…" autocomplete="off" />
+        </div>
+      </div>
+    </header>
+
+    <nav class="halls" id="hallNav"></nav>
+    <main class="grid" id="grid"></main>
+    <div class="grid-empty" id="gridEmpty" hidden>
+      <p>没有匹配的展品</p>
+    </div>
+  </div>
+
+  <div id="stage" class="stage" hidden>
+    <div class="stage-bar">
+      <button class="btn-back" id="btnBack">← 返回大厅</button>
+      <div class="stage-title">
+        <strong id="stageName"></strong>
+        <span id="stageVer"></span>
+      </div>
+      <div class="stage-actions">
+        <button class="btn-ghost" id="btnNote">史料卡</button>
+      </div>
+    </div>
+
+    <div class="stage-room" id="stageRoom">
+      <div class="device" id="device"></div>
+    </div>
+
+    <aside class="note-panel" id="notePanel" hidden>
+      <div class="note-head">
+        <h3 id="noteTitle"></h3>
+        <button id="noteClose" class="note-close">×</button>
+      </div>
+      <div class="note-body" id="noteBody"></div>
+    </aside>
+  </div>
+
+  <div class="boot-overlay" id="bootOverlay" hidden>
+    <div class="boot-inner">
+      <div class="boot-logo" id="bootLogo"></div>
+      <div class="boot-name" id="bootName"></div>
+      <div class="boot-bar"><i></i></div>
+      <div class="boot-hint" id="bootHint"></div>
+    </div>
+  </div>
+
+  <script src="desktop.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
