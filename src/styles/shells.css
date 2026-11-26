@@ -1,0 +1,216 @@
+/* ============================================================
+   硬件外壳：显示器 / 手机 / 诺基亚直板机
+   这里的渐变与材质只表现塑料、金属等硬件质感
+   ============================================================ */
+
+/* ---------------- 显示器 ---------------- */
+
+.device.monitor { gap: 0; }
+
+.monitor .bezel {
+  position: relative;
+  padding: 14px 14px 34px;
+  border-radius: 12px;
+  background:
+    linear-gradient(180deg, #4a4a4f 0%, #33333a 18%, #26262c 55%, #1c1c21 100%);
+  box-shadow:
+    0 22px 60px rgba(0, 0, 0, .7),
+    inset 0 1px 0 rgba(255, 255, 255, .16),
+    inset 0 -2px 6px rgba(0, 0, 0, .55);
+  display: flex; flex-direction: column; align-items: center;
+}
+
+.monitor .bezel::before {
+  content: "";
+  position: absolute; inset: 6px 6px 26px;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, .35);
+  pointer-events: none;
+}
+
+.monitor .screen {
+  height: min(60vh, calc(78vw / 1.7778));
+  width: auto;
+  aspect-ratio: 16 / 9;
+  border-radius: 4px;
+  box-shadow: 0 0 0 1px #000, 0 0 26px rgba(120, 170, 255, .10);
+  background: #000;
+}
+
+.monitor .bezel-brand {
+  position: absolute; bottom: 11px; left: 0; right: 0;
+  text-align: center;
+  font-size: 9.5px; letter-spacing: .34em;
+  color: #8e8e96;
+  text-transform: uppercase;
+  user-select: none;
+}
+
+.monitor .stand {
+  width: 132px; height: 26px;
+  background: linear-gradient(180deg, #2c2c32 0%, #1a1a1f 100%);
+  box-shadow: inset 0 2px 4px rgba(255, 255, 255, .07);
+}
+.monitor .stand::after {
+  content: "";
+  display: block;
+  width: 210px; height: 12px;
+  margin: 18px 0 0 -39px;
+  border-radius: 50% 50% 6px 6px / 60% 60% 4px 4px;
+  background: linear-gradient(180deg, #2a2a30 0%, #131317 100%);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, .6);
+}
+
+/* ---------------- 手机 ---------------- */
+
+.device.phone { gap: 0; }
+
+.phone .body {
+  position: relative;
+  padding: 9px;
+  border-radius: 44px;
+  background:
+    linear-gradient(160deg, #3a3a40 0%, #1e1e23 30%, #141418 70%, #26262c 100%);
+  box-shadow:
+    0 26px 60px rgba(0, 0, 0, .75),
+    inset 0 0 0 1px rgba(255, 255, 255, .13),
+    inset 0 0 0 3px rgba(0, 0, 0, .55);
+}
+
+.phone .side-btn {
+  position: absolute;
+  width: 3px; border-radius: 2px;
+  background: #2b2b31;
+}
+.phone .side-btn.pw { right: -3px; top: 116px; height: 58px; }
+.phone .side-btn.v1 { left: -3px; top: 96px; height: 34px; }
+.phone .side-btn.v2 { left: -3px; top: 138px; height: 34px; }
+.phone .side-btn.v3 { left: -3px; top: 180px; height: 34px; }
+
+.phone .screen {
+  height: min(64vh, calc(34vw / 0.4615));
+  width: auto;
+  aspect-ratio: 9 / 19.5;
+  border-radius: 36px;
+  background: #000;
+}
+
+/* 刘海 / 挖孔 */
+.phone .notch {
+  position: absolute; top: 11px; left: 50%; transform: translateX(-50%);
+  z-index: 65;
+  width: 108px; height: 27px;
+  background: #000;
+  border-radius: 0 0 16px 16px;
+  pointer-events: none;
+}
+.phone .punch {
+  position: absolute; top: 11px; left: 50%; transform: translateX(-50%);
+  z-index: 65;
+  width: 11px; height: 11px;
+  border-radius: 50%;
+  background: #000;
+  box-shadow: inset 0 0 0 1px #17171b;
+  pointer-events: none;
+}
+.phone .island {
+  position: absolute; top: 13px; left: 50%; transform: translateX(-50%);
+  z-index: 65;
+  width: 96px; height: 26px;
+  background: #000;
+  border-radius: 20px;
+  pointer-events: none;
+}
+
+/* ---------------- 诺基亚直板机 ---------------- */
+
+.device.nokia { gap: 0; }
+
+.nokia .body {
+  position: relative;
+  padding: 12px 12px 18px;
+  border-radius: 26px 26px 22px 22px;
+  background: linear-gradient(180deg, #3c4048 0%, #22252b 42%, #17191d 100%);
+  box-shadow:
+    0 26px 56px rgba(0, 0, 0, .78),
+    inset 0 1px 0 rgba(255, 255, 255, .18),
+    inset 0 -3px 8px rgba(0, 0, 0, .6);
+  display: flex; flex-direction: column; align-items: center;
+}
+
+.nokia .brand-slot {
+  font-size: 9px; letter-spacing: .38em; color: #9aa0aa;
+  margin-bottom: 7px; text-transform: uppercase;
+}
+
+.nokia .screen-frame {
+  padding: 7px;
+  border-radius: 6px;
+  background: linear-gradient(180deg, #0e0f11, #1b1d21);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .06), inset 0 2px 10px rgba(0, 0, 0, .8);
+}
+
+.nokia .screen {
+  height: min(36vh, calc(26vw / 0.75));
+  width: auto;
+  aspect-ratio: 3 / 4;
+  border-radius: 3px;
+  background: #c8d0b8;
+}
+
+/* 软键行 */
+.nokia .softrow {
+  display: flex; align-items: center; justify-content: space-between;
+  width: 100%;
+  margin-top: 10px;
+  padding: 0 6px;
+}
+.nokia .softkey {
+  width: 54px; height: 26px;
+  border: none;
+  border-radius: 13px 13px 8px 8px;
+  background: linear-gradient(180deg, #6c727c 0%, #3d424a 100%);
+  color: #dfe3ea;
+  font-size: 10px;
+  letter-spacing: .1em;
+  cursor: pointer;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .35), 0 2px 0 #0c0d0f;
+  font-family: inherit;
+}
+.nokia .softkey:active { transform: translateY(1px); box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 1px 0 #0c0d0f; }
+
+.nokia .soft-mid {
+  width: 46px; height: 46px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #4a5058 0%, #2a2e34 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .28), 0 2px 0 #0a0b0d;
+  display: grid; place-items: center;
+  color: #c8ccd4; font-size: 11px;
+  cursor: pointer;
+}
+
+/* 键盘区 */
+.nokia .keypad {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 7px 8px;
+  width: 100%;
+  padding: 0 2px;
+}
+.nokia .key {
+  height: 30px;
+  border: none;
+  border-radius: 5px 5px 9px 9px;
+  background: linear-gradient(180deg, #5a6068 0%, #33373e 100%);
+  color: #eef0f4;
+  font-size: 13px; font-weight: 600;
+  cursor: pointer;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .3), 0 2px 0 #0b0c0e;
+  font-family: inherit;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  line-height: 1;
+}
+.nokia .key small { font-size: 8px; color: #aeb4be; margin-top: 3px; letter-spacing: .08em; }
+.nokia .key:active { transform: translateY(1px); }
+.nokia .key:active { box-shadow: inset 0 1px 0 rgba(255,255,255,.15), 0 1px 0 #0b0c0e; }
