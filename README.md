@@ -27,8 +27,8 @@ npm start
 ```
 os-museum/
 ├─ main.js                 Electron 主进程
-├─ preload.js              把 data/systems.json 安全地送进渲染进程，并注入 isElectron 标记
-├─ data/systems.json       100 件展品的数据（唯一数据源）
+├─ preload.js              按展厅读取 data/systems/*.json 合并，注入渲染进程与 isElectron 标记
+├─ data/systems/           100 件展品数据，按展厅分 8 个 JSON（唯一数据源）
 ├─ src/
 │  ├─ index.html
 │  ├─ app.js               大厅、筛选、进入展品、开机动画
@@ -42,7 +42,7 @@ os-museum/
 │  ├─ icons/<系统id>/      该系统自己的图标
 │  ├─ logos/               厂商 Logo
 │  └─ manifest.json        机器可读的素材索引
-├─ tools/gen-manifest.js   改了 systems.json 之后重新生成素材清单
+├─ tools/gen-manifest.js   改了展品数据之后重新生成素材清单
 └─ 素材清单.md             你要准备的全部图片
 ```
 
@@ -65,7 +65,7 @@ os-museum/
 
 ## 加一件新展品
 
-1. 在 `data/systems.json` 里追加一条，字段照抄现有条目。
+1. 在 `data/systems/` 对应展厅的 JSON 里追加一条，字段照抄现有条目。
 2. `node tools/gen-manifest.js` 重新生成素材清单。
 3. 把壁纸和图标放进清单里写的路径。
 
