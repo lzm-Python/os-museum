@@ -35,9 +35,18 @@
       SYSTEMS = window.museumHost.systems;
       return true;
     }
+    const hallIds = HALLS.filter(function (h) { return h.id !== 'all'; }).map(function (h) { return h.id; });
     try {
-      const res = await fetch('../data/systems.json');
-      SYSTEMS = await res.json();
+      const parts = await Promise.all(hallIds.map(async function (h) {
+        try {
+          const res = await fetch('../data/systems/' + h + '.json');
+          if (!res.ok) return [];
+          return await res.json();
+        } catch (e) {
+          return [];
+        }
+      }));
+      SYSTEMS = parts.reduce(function (a, b) { return a.concat(b); }, []);
       return SYSTEMS.length > 0;
     } catch (err) {
       console.error('数据加载失败', err);
@@ -222,7 +231,7 @@
   async function init() {
     const ok = await loadData();
     if (!ok) {
-      document.body.innerHTML = '<div style="padding:40px;font-family:sans-serif;color:#ddd">展品数据读取失败。请检查 data/systems.json 是否存在。</div>';
+      document.body.innerHTML = '<div style="padding:40px;font-family:sans-serif;color:#ddd">展品数据读取失败，请检查 data/systems 分厅数据是否完整。</div>';
       return;
     }
 
