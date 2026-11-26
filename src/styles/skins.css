@@ -1,0 +1,1299 @@
+/* =====================================================================
+   皮肤系统：59 种系统外观
+   —— 桌面背景一律来自 assets/wallpapers 的真实图片，本文件不提供背景替身
+   —— 标题栏的渐变属于系统 UI 本身（Luna / Aero / Aqua 就是这么画的）
+   ===================================================================== */
+
+.desk {
+  position: absolute; inset: 0;
+  background-color: #000;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  overflow: hidden;
+  font-family: var(--ui-font, "Segoe UI", "Microsoft YaHei", sans-serif);
+  color: var(--ui-fg, #000);
+
+  /* 默认（Windows 经典） */
+  --tb-h: 26px;
+  --tb-bg: #000080;
+  --tb-fg: #ffffff;
+  --tb-fs: 12px;
+  --frame-bg: #c0c0c0;
+  --frame-fg: #000000;
+  --frame-border: 1px solid #000;
+  --frame-radius: 0px;
+  --win-shadow: 2px 2px 0 rgba(0,0,0,.45);
+  --btn-size: 18px;
+  --btn-bg: #c0c0c0;
+  --btn-fg: #000;
+  --title-align: left;
+  --bar-h: 34px;
+  --bar-bg: #c0c0c0;
+  --bar-fg: #000;
+  --menu-bg: #c0c0c0;
+  --menu-fg: #000;
+  --menu-radius: 0px;
+  --menu-border: 2px solid #000;
+  --menu-hover: #000080;
+  --menu-hover-fg: #fff;
+  --icon-fg: #fff;
+  --icon-shadow: 0 1px 2px rgba(0,0,0,.9);
+}
+
+/* 桌面背景图由 JS 设置；缺失时由 .asset-missing 覆盖显示 */
+
+/* ------------------------ 桌面图标 ------------------------ */
+
+.desk-icons {
+  position: absolute; inset: 0;
+  padding: 10px;
+  display: flex; flex-direction: column; flex-wrap: wrap;
+  align-content: flex-start; align-items: flex-start;
+  gap: 2px;
+  z-index: 2;
+}
+.desk-icons.right { align-content: flex-end; align-items: flex-start; padding-right: 14px; }
+.desk-icons.none { display: none; }
+
+.desk-icon {
+  width: 84px;
+  padding: 8px 3px 6px;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  cursor: default;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.desk-icon .ic {
+  width: 40px; height: 40px;
+  display: flex; align-items: center; justify-content: center;
+  flex: 0 0 auto;
+}
+.desk-icon .ic img { width: 100%; height: 100%; object-fit: contain; }
+.desk-icon .ic.miss {
+  border: 1px dashed rgba(255,255,255,.35);
+  background: rgba(0,0,0,.45);
+  color: #e0c88a;
+  font-size: 9px;
+  text-align: center;
+}
+.desk-icon .lbl {
+  font-size: 11px; line-height: 1.3;
+  color: var(--icon-fg);
+  text-shadow: var(--icon-shadow);
+  text-align: center;
+  max-width: 78px;
+  overflow-wrap: break-word;
+}
+.desk-icon.sel {
+  background: rgba(30, 110, 220, .42);
+  border-color: rgba(180, 215, 255, .62);
+}
+
+/* ------------------------ 窗口 ------------------------ */
+
+.win {
+  position: absolute;
+  display: flex; flex-direction: column;
+  min-width: 230px; min-height: 130px;
+  background: var(--frame-bg);
+  color: var(--frame-fg);
+  border: var(--frame-border);
+  border-radius: var(--frame-radius);
+  box-shadow: var(--win-shadow);
+  overflow: hidden;
+  z-index: 20;
+}
+.win.active { z-index: 30; }
+
+.win .tbar {
+  flex: 0 0 auto;
+  height: var(--tb-h);
+  display: flex; align-items: center;
+  gap: 6px;
+  padding: 0 5px;
+  background: var(--tb-bg);
+  color: var(--tb-fg);
+  font-size: var(--tb-fs);
+  cursor: move;
+  user-select: none;
+  -webkit-user-select: none;
+  position: relative;
+}
+.win .tbar .ticon { width: 15px; height: 15px; flex: 0 0 auto; }
+.win .tbar .ticon img { width: 100%; height: 100%; object-fit: contain; }
+.win .tbar .tname {
+  flex: 1 1 auto;
+  font-weight: 600;
+  text-align: var(--title-align);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.win .wbtns { display: flex; gap: 2px; flex: 0 0 auto; }
+.win .wbtn {
+  width: var(--btn-size); height: calc(var(--btn-size) - 2px);
+  display: grid; place-items: center;
+  font-size: 10px; line-height: 1;
+  background: var(--btn-bg); color: var(--btn-fg);
+  border: 1px solid rgba(0,0,0,.42);
+  border-radius: 0;
+  cursor: default; font-family: inherit;
+  padding: 0;
+}
+.win .wbtn:hover { filter: brightness(1.14); }
+.win .wbtn.x { font-size: 11px; }
+
+.win .tbody {
+  flex: 1 1 auto;
+  overflow: auto;
+  background: var(--body-bg, #fff);
+  color: var(--body-fg, #111);
+  font-size: 12.5px;
+}
+
+/* 通用窗口内容：资源管理器 */
+.exp { display: flex; flex-direction: column; height: 100%; }
+.exp .addr {
+  flex: 0 0 auto;
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 9px;
+  border-bottom: 1px solid rgba(0,0,0,.16);
+  font-size: 11.5px;
+  background: rgba(255,255,255,.06);
+}
+.exp .addr .path {
+  flex: 1 1 auto;
+  padding: 3px 7px;
+  border: 1px solid rgba(0,0,0,.28);
+  background: #fff;
+  color: #222;
+  font-size: 11px;
+  white-space: nowrap; overflow: hidden;
+}
+.exp .files {
+  flex: 1 1 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(92px, 1fr));
+  gap: 10px 6px;
+  padding: 12px;
+  align-content: start;
+  overflow: auto;
+}
+.exp .file { display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 6px 2px; border-radius: 2px; }
+.exp .file .ic { width: 32px; height: 32px; }
+.exp .file .ic img { width: 100%; height: 100%; object-fit: contain; }
+.exp .file .ic.miss { border: 1px dashed #9a9a9a; color: #666; font-size: 9px; display: grid; place-items: center; text-align: center; }
+.exp .file span { font-size: 11px; text-align: center; }
+
+.note-body ul { margin: 0; padding-left: 18px; line-height: 1.9; }
+.txtpad { padding: 8px 10px; }
+.txtpad textarea {
+  width: 100%; height: 100%; min-height: 120px; resize: none;
+  border: 1px solid #9a9a9a; background: #fff; color: #111;
+  font-family: Consolas, "Courier New", monospace; font-size: 12.5px;
+  padding: 7px; outline: none;
+}
+.about-card { padding: 16px 18px; line-height: 1.9; font-size: 12.5px; }
+.about-card h4 { font-size: 14px; margin-bottom: 8px; }
+.about-card .row { display: flex; gap: 10px; }
+.about-card .k { width: 72px; color: #5d6470; }
+
+/* ------------------------ 任务栏 / 菜单栏 ------------------------ */
+
+.bar {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  height: var(--bar-h);
+  display: flex; align-items: center; gap: 3px;
+  padding: 0 3px;
+  background: var(--bar-bg);
+  color: var(--bar-fg);
+  border-top: 1px solid rgba(0,0,0,.35);
+  z-index: 50;
+  user-select: none;
+  font-size: 12px;
+}
+.bar.top {
+  top: 0; bottom: auto;
+  border-top: none;
+  border-bottom: 1px solid rgba(0,0,0,.3);
+  z-index: 50;
+}
+.bar.left {
+  left: 0; right: auto; top: 0; bottom: 0;
+  width: 78px; height: auto;
+  flex-direction: column;
+  border-top: none; border-right: 1px solid rgba(0,0,0,.25);
+}
+
+.bar .startbtn {
+  flex: 0 0 auto;
+  height: calc(var(--bar-h) - 6px);
+  min-width: 40px;
+  display: flex; align-items: center; gap: 5px;
+  padding: 0 9px;
+  cursor: default;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  background: var(--start-bg, transparent);
+  color: var(--start-fg, inherit);
+  font-weight: 600;
+  font-size: 12px;
+  font-family: inherit;
+}
+.bar .startbtn:hover { filter: brightness(1.12); }
+.bar .startbtn .slogo { width: 19px; height: 19px; position: relative; }
+.bar .startbtn .slogo img { width: 100%; height: 100%; object-fit: contain; }
+.bar .startbtn .slogo.miss { display: none; }
+.bar .startbtn .slogo.fallback {
+  display: block;
+  width: 7px; height: 7px;
+  margin-right: 8px;
+  background: currentColor;
+  box-shadow: 8px 0 0 currentColor, 0 8px 0 currentColor, 8px 8px 0 currentColor;
+}
+.bar .startbtn.icononly .stxt { display: none; }
+.bar .startbtn.icononly { padding: 0 8px; }
+.bar .tray .vol {
+  width: 0; height: 0;
+  border: 5px solid transparent;
+  border-right-color: currentColor;
+  position: relative;
+  margin-right: 2px;
+}
+.bar .tray .vol::after {
+  content: "";
+  position: absolute; left: 3px; top: -6px;
+  width: 9px; height: 12px;
+  border-right: 1.5px solid currentColor;
+  border-radius: 0 8px 8px 0;
+  opacity: .8;
+}
+
+.bar .tasks { flex: 1 1 auto; display: flex; gap: 3px; overflow: hidden; }
+.bar .task {
+  height: calc(var(--bar-h) - 8px);
+  min-width: 108px; max-width: 178px;
+  display: flex; align-items: center; gap: 6px;
+  padding: 0 9px;
+  font-size: 11.5px;
+  border: 1px solid rgba(0,0,0,.35);
+  border-radius: 2px;
+  background: var(--task-bg, rgba(255,255,255,.9));
+  color: var(--task-fg, #111);
+  cursor: default;
+  white-space: nowrap; overflow: hidden;
+}
+.bar .task.on { background: var(--task-on-bg, rgba(0,0,0,.24)); box-shadow: inset 1px 1px 0 rgba(0,0,0,.3); }
+.bar .task .ticon { width: 15px; height: 15px; flex: 0 0 auto; }
+.bar .task .ticon img { width: 100%; height: 100%; object-fit: contain; }
+
+.bar .tray {
+  flex: 0 0 auto;
+  display: flex; align-items: center; gap: 8px;
+  padding: 0 9px;
+  height: calc(var(--bar-h) - 4px);
+  border-left: 1px solid rgba(0,0,0,.22);
+  font-size: 11.5px;
+}
+
+/* Mac 顶部菜单栏 */
+.menubar {
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 26px;
+  display: flex; align-items: center; gap: 2px;
+  padding: 0 10px;
+  background: var(--menubar-bg, rgba(255,255,255,.92));
+  color: var(--menubar-fg, #111);
+  z-index: 50;
+  font-size: 12.5px;
+  border-bottom: 1px solid rgba(0,0,0,.18);
+}
+.menubar .apple { width: 26px; display: grid; place-items: center; font-weight: 700; }
+.menubar .apple img { width: 15px; height: 15px; object-fit: contain; }
+.menubar .mt { padding: 0 9px; height: 100%; display: flex; align-items: center; cursor: default; }
+.menubar .mt:hover { background: rgba(0,0,0,.12); }
+.menubar .mt.bold { font-weight: 700; }
+.menubar .mt.clock { margin-left: auto; font-variant-numeric: tabular-nums; }
+
+/* Dock */
+.dock {
+  position: absolute;
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 10px;
+  border-radius: 18px;
+  background: var(--dock-bg, rgba(255,255,255,.3));
+  backdrop-filter: blur(16px) saturate(1.5);
+  -webkit-backdrop-filter: blur(16px) saturate(1.5);
+  border: 1px solid rgba(255,255,255,.28);
+  z-index: 45;
+}
+.dock.bottom { left: 50%; transform: translateX(-50%); bottom: 12px; }
+.dock.left { left: 12px; top: 50%; transform: translateY(-50%); flex-direction: column; }
+.dock .ditem { width: 40px; height: 40px; display: grid; place-items: center; transition: transform .16s; }
+.dock .ditem img { width: 100%; height: 100%; object-fit: contain; }
+.dock .ditem:hover { transform: translateY(-4px) scale(1.1); }
+.dock .ditem.miss { border: 1px dashed rgba(255,255,255,.3); border-radius: 7px; }
+
+/* ------------------------ 开始菜单 ------------------------ */
+
+.menu {
+  position: absolute;
+  z-index: 80;
+  background: var(--menu-bg);
+  color: var(--menu-fg);
+  border: var(--menu-border);
+  border-radius: var(--menu-radius);
+  box-shadow: 0 12px 34px rgba(0,0,0,.5);
+  overflow: hidden;
+  min-width: 200px;
+}
+.menu .mi {
+  display: flex; align-items: center; gap: 9px;
+  padding: 8px 14px;
+  font-size: 12.5px;
+  cursor: default;
+}
+.menu .mi:hover { background: var(--menu-hover); color: var(--menu-hover-fg); }
+.menu .mi .i { width: 18px; height: 18px; flex: 0 0 auto; }
+.menu .mi .i img { width: 100%; height: 100%; object-fit: contain; }
+.menu .sep { height: 1px; background: rgba(0,0,0,.25); margin: 4px 0; }
+.menu .head {
+  padding: 10px 14px 8px;
+  font-size: 11px; letter-spacing: .06em;
+  opacity: .72;
+  border-bottom: 1px solid rgba(0,0,0,.18);
+}
+
+/* Win10 毛玻璃开始菜单 */
+.menu.win10 {
+  width: min(620px, calc(100% - 16px));
+  height: min(520px, calc(100% - 58px));
+  min-height: 0;
+  left: 8px; bottom: 46px;
+  background:
+    linear-gradient(180deg, rgba(42, 42, 48, .96) 0%, rgba(26, 26, 32, .96) 100%);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 6px;
+  backdrop-filter: blur(26px) saturate(1.6);
+  -webkit-backdrop-filter: blur(26px) saturate(1.6);
+  box-shadow: 0 20px 50px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.08);
+  display: flex;
+}
+.menu.win10 .rail {
+  width: 48px; flex: 0 0 auto;
+  padding: 14px 0 10px;
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  border-right: 1px solid rgba(255,255,255,.06);
+}
+.menu.win10 .railbtn { width: 24px; height: 24px; display: grid; place-items: center; opacity: .8; }
+.menu.win10 .railbtn:hover { opacity: 1; }
+.menu.win10 .railav {
+  margin-top: auto; width: 26px; height: 26px; border-radius: 50%;
+  background: rgba(255,255,255,.16);
+  border: 1px solid rgba(255,255,255,.22);
+}
+.menu.win10 .appcol {
+  width: 196px; flex: 0 0 auto;
+  padding: 16px 4px 12px 10px;
+  overflow: auto;
+  border-right: 1px solid rgba(255,255,255,.06);
+}
+.menu.win10 .ghead2 { margin-top: 18px; }
+.menu.win10 .ghead {
+  font-size: 11px; letter-spacing: .04em;
+  color: #a9a9b3;
+  padding: 6px 8px 6px;
+}
+.menu.win10 .arow {
+  display: flex; align-items: center; gap: 10px;
+  padding: 7px 8px; border-radius: 3px; cursor: default;
+  font-size: 12px; color: #ececf0;
+}
+.menu.win10 .arow:hover { background: rgba(255,255,255,.09); }
+.menu.win10 .arow .ic { width: 18px; height: 18px; flex: 0 0 auto; }
+.menu.win10 .arow .ic img { width: 100%; height: 100%; object-fit: contain; }
+.menu.win10 .arow .new { margin-left: auto; font-style: normal; font-size: 10px; color: #8ad3a5; }
+.menu.win10 .tilecol { flex: 1 1 auto; padding: 16px 14px 52px; overflow: auto; }
+.menu.win10 .tilebox {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: 74px;
+  gap: 6px;
+}
+.menu.win10 .tile {
+  background: rgba(255,255,255,.07);
+  border: 1px solid rgba(255,255,255,.09);
+  display: flex; flex-direction: column; align-items: flex-start;
+  justify-content: center; gap: 6px;
+  padding: 10px 11px;
+  cursor: default;
+  transition: background .12s;
+}
+.menu.win10 .tile:hover { background: rgba(255,255,255,.13); }
+.menu.win10 .tile .ic { width: 22px; height: 22px; }
+.menu.win10 .tile.big { grid-column: span 2; grid-row: span 2; }
+.menu.win10 .tile.wide { grid-column: span 2; }
+.menu.win10 .tile span { font-size: 11px; color: #eaeaee; }
+.menu.win10 .foot {
+  position: absolute; left: 48px; right: 0; bottom: 0;
+  height: 44px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 14px 0 12px;
+  background: rgba(0,0,0,.3);
+  border-top: 1px solid rgba(255,255,255,.08);
+  font-size: 11.5px; color: #d2d2d8;
+}
+.menu.win10 .fuser { display: flex; align-items: center; gap: 9px; }
+.menu.win10 .fav {
+  width: 24px; height: 24px; border-radius: 50%;
+  background: rgba(255,255,255,.18);
+  border: 1px solid rgba(255,255,255,.24);
+}
+.menu.win10 .facts { display: flex; align-items: center; gap: 16px; }
+.menu.win10 .fbtn { font-size: 11.5px; opacity: .86; }
+
+/* Win11 圆角开始菜单 */
+.menu.win11 {
+  width: min(620px, calc(100% - 16px));
+  height: min(500px, calc(100% - 70px));
+  left: 50%; transform: translateX(-50%); bottom: 62px;
+  background: rgba(40,40,44,.94);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 10px;
+  backdrop-filter: blur(30px) saturate(1.8);
+  -webkit-backdrop-filter: blur(30px) saturate(1.8);
+  box-shadow: 0 24px 60px rgba(0,0,0,.55);
+  padding: 22px 26px;
+  display: flex; flex-direction: column;
+}
+.menu.win11 .searchbox {
+  height: 34px; border-radius: 17px;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.12);
+  display: flex; align-items: center; padding: 0 14px;
+  font-size: 12px; color: #bdbdc6;
+  margin-bottom: 18px;
+}
+.menu.win11 .grid6 { display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px 4px; }
+.menu.win11 .app { display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 8px 0; border-radius: 6px; }
+.menu.win11 .app:hover { background: rgba(255,255,255,.07); }
+.menu.win11 .app .ic { width: 28px; height: 28px; }
+.menu.win11 .app .ic img { width: 100%; height: 100%; object-fit: contain; }
+.menu.win11 .app span { font-size: 10px; color: #dfdfe4; text-align: center; }
+.menu.win11 .mfoot { margin-top: auto; border-top: 1px solid rgba(255,255,255,.1); padding-top: 12px; display: flex; gap: 8px; justify-content: flex-end; }
+.menu.win11 .mfootb {
+  font-size: 11.5px; color: #d8d8de;
+  padding: 6px 12px; border-radius: 5px;
+  background: rgba(255,255,255,.06);
+}
+
+/* Win8 / 8.1 全屏开始屏幕 */
+.startfull {
+  position: absolute; inset: 0; z-index: 80;
+  background: var(--startfull-bg, #1c2b3a);
+  color: #fff;
+  padding: 34px 60px;
+  overflow: auto;
+}
+.startfull .tiles { display: grid; grid-template-columns: repeat(6, 110px); gap: 8px; }
+.startfull .tile {
+  height: 110px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+  background: var(--accent);
+  cursor: default;
+}
+.startfull .tile:nth-child(3n) { background: #2b8cbe; }
+.startfull .tile:nth-child(4n) { background: #7c4dff; }
+.startfull .tile:nth-child(5n) { background: #00897b; }
+.startfull .tile .ic { width: 34px; height: 34px; }
+.startfull .tile .ic img { width: 100%; height: 100%; object-fit: contain; }
+.startfull .tile span { font-size: 11px; }
+
+/* Linux 启动器（全屏网格） */
+.launcher {
+  position: absolute; inset: 0; z-index: 80;
+  background: rgba(18,18,22,.86);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 48px 8%;
+  color: #e8e8ee;
+  overflow: auto;
+}
+.launcher .lgrid { display: grid; grid-template-columns: repeat(auto-fill, 104px); gap: 18px 6px; }
+.launcher .lapp { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 10px 4px; border-radius: 8px; cursor: default; }
+.launcher .lapp:hover { background: rgba(255,255,255,.08); }
+.launcher .lapp .ic { width: 46px; height: 46px; }
+.launcher .lapp .ic img { width: 100%; height: 100%; object-fit: contain; }
+.launcher .lapp span { font-size: 12px; }
+
+/* ------------------------ 各系统外观 ------------------------ */
+
+/* Windows 1.x：黑白、粗边框、控制盒在左侧 */
+.desk.chrome-win1 {
+  --tb-h: 18px; --tb-bg: #fff; --tb-fg: #000; --tb-fs: 11px;
+  --frame-bg: #fff; --frame-fg: #000; --frame-border: 2px solid #000; --frame-radius: 0;
+  --win-shadow: 1px 1px 0 #000; --btn-size: 0px;
+  --bar-h: 0px; --icon-fg: #000; --icon-shadow: none;
+  --body-bg: #fff; --body-fg: #000;
+}
+.desk.chrome-win1 .win .wbtn { display: none; }
+.desk.chrome-win1 .win .tbar { border-bottom: 2px solid #000; }
+.desk.chrome-win1 .win .ctrlbox {
+  width: 12px; height: 12px; border: 1px solid #000; margin-left: -2px;
+  display: grid; place-items: center; font-size: 9px;
+}
+
+/* Windows 3.x：灰底 3D、蓝标题栏 */
+.desk.chrome-win31 {
+  --tb-h: 19px; --tb-bg: #000080; --tb-fg: #fff; --tb-fs: 11.5px;
+  --frame-bg: #c0c0c0; --frame-fg: #000;
+  --frame-border: 1px solid #000; --frame-radius: 0;
+  --win-shadow: 2px 2px 0 #000; --btn-size: 17px;
+  --btn-bg: #c0c0c0; --btn-fg: #000;
+  --bar-h: 0px; --icon-fg: #000; --icon-shadow: none;
+  --body-bg: #fff; --body-fg: #000;
+}
+
+/* Windows 95/98：经典 3D 凸起 */
+.desk.chrome-win95 {
+  --tb-h: 20px; --tb-bg: #000080; --tb-fg: #fff; --tb-fs: 11.5px;
+  --frame-bg: #c0c0c0; --frame-fg: #000;
+  --frame-border: 2px outset #dfdfdf; --frame-radius: 0;
+  --win-shadow: 2px 2px 3px rgba(0,0,0,.5); --btn-size: 16px;
+  --btn-bg: #c0c0c0; --btn-fg: #000;
+  --bar-h: 30px; --bar-bg: #c0c0c0; --bar-fg: #000;
+  --menu-bg: #c0c0c0; --menu-fg: #000; --menu-border: 2px outset #dfdfdf; --menu-hover: #000080;
+  --icon-fg: #fff; --icon-shadow: 0 1px 2px #000;
+  --task-bg: #c0c0c0; --task-fg: #000;
+  --body-bg: #fff; --body-fg: #000;
+}
+.desk.chrome-win95 .bar .task { border: 2px outset #dfdfdf; }
+
+/* Windows 2000 */
+.desk.chrome-win2000 {
+  --tb-h: 20px; --tb-bg: #0a246a; --tb-fg: #fff; --tb-fs: 11.5px;
+  --frame-bg: #d4d0c8; --frame-fg: #000;
+  --frame-border: 1px solid #404040; --frame-radius: 0;
+  --win-shadow: 3px 3px 6px rgba(0,0,0,.45); --btn-size: 16px;
+  --btn-bg: #d4d0c8; --btn-fg: #000;
+  --bar-h: 30px; --bar-bg: #d4d0c8; --bar-fg: #000;
+  --menu-bg: #d4d0c8; --menu-fg: #000; --menu-border: 1px solid #404040; --menu-hover: #0a246a;
+  --task-bg: #d4d0c8; --task-fg: #000;
+  --body-bg: #fff; --body-fg: #000;
+}
+.desk.chrome-win2000 .win .tbar { background: linear-gradient(90deg, #0a246a 0%, #a6caf0 100%); }
+
+/* Windows XP Luna */
+.desk.chrome-winxp {
+  --tb-h: 26px; --tb-fs: 12px;
+  --tb-bg: #0058ee; --tb-fg: #fff;
+  --frame-bg: #ece9d8; --frame-fg: #000;
+  --frame-border: 3px solid #0831d9; --frame-radius: 8px 8px 0 0;
+  --win-shadow: 2px 4px 14px rgba(0,0,40,.45); --btn-size: 20px;
+  --btn-bg: #3b7ce8; --btn-fg: #fff;
+  --bar-h: 38px; --bar-bg: #245edb; --bar-fg: #fff;
+  --menu-bg: #fff; --menu-fg: #00136b; --menu-border: 1px solid #0831d9; --menu-hover: #2f71cd;
+  --icon-fg: #fff; --icon-shadow: 0 1px 3px #000;
+  --start-bg: #3c8b3c; --start-fg: #fff;
+  --task-bg: #3f8cf3; --task-fg: #fff;
+  --body-bg: #fff; --body-fg: #000;
+}
+.desk.chrome-winxp .win .tbar { background: linear-gradient(180deg, #3f8cf3 0%, #0058ee 12%, #0044cc 92%);
+  border-radius: 5px 5px 0 0; margin: 0 3px; }
+.desk.chrome-winxp .win .wbtn { border-radius: 3px; font-weight: 700; }
+.desk.chrome-winxp .win .wbtn.x { background: #e04a3a; }
+.desk.chrome-winxp .bar {
+  background: linear-gradient(180deg, #3f8cf6 0%, #245edb 8%, #1a4fc4 86%, #1847b0 100%);
+  border-top: 1px solid #4f9bf8;
+}
+.desk.chrome-winxp .bar .startbtn {
+  height: 100%;
+  border-radius: 0 11px 11px 0;
+  padding: 0 16px 0 12px;
+  background: linear-gradient(180deg, #6db43c 0%, #4a9a2e 22%, #37821f 72%, #2a6d18 100%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.5), inset -1px 0 2px rgba(0,0,0,.3), 0 1px 2px rgba(0,0,0,.25);
+  border: none;
+  font-style: italic;
+  font-weight: 700;
+  letter-spacing: .04em;
+}
+
+/* Vista / 7 Aero 毛玻璃 */
+.desk.chrome-aero {
+  --tb-h: 28px; --tb-fs: 12px;
+  --tb-bg: rgba(200,225,245,.55); --tb-fg: #10233a;
+  --frame-bg: rgba(232,240,248,.92); --frame-fg: #10233a;
+  --frame-border: 1px solid rgba(120,160,200,.75); --frame-radius: 8px 8px 0 0;
+  --win-shadow: 0 0 0 1px rgba(255,255,255,.7), 0 10px 30px rgba(0,20,50,.5);
+  --btn-size: 21px; --btn-bg: rgba(255,255,255,.35); --btn-fg: #17324d;
+  --bar-h: 40px; --bar-bg: rgba(16,24,38,.72); --bar-fg: #eaf2fb;
+  --menu-bg: rgba(240,246,252,.92); --menu-fg: #12283f;
+  --menu-border: 1px solid rgba(120,160,200,.8); --menu-hover: rgba(51,153,255,.28);
+  --icon-fg: #fff; --icon-shadow: 0 1px 3px rgba(0,0,0,.85);
+  --start-bg: rgba(255,255,255,.18); --start-fg: #fff;
+  --task-bg: rgba(255,255,255,.14); --task-fg: #eaf2fb;
+  --body-bg: #f7fafd; --body-fg: #1b2a3a;
+}
+.desk.chrome-aero .win .tbar { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  background: linear-gradient(180deg, rgba(225,240,255,.85) 0%, rgba(190,215,240,.62) 100%);
+  border-bottom: 1px solid rgba(120,160,200,.6); }
+.desk.chrome-aero .bar { backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); }
+.desk.chrome-aero .win .wbtn.x { background: rgba(220,60,50,.85); color: #fff; }
+
+/* Windows 8 扁平 */
+.desk.chrome-win8 {
+  --tb-h: 26px; --tb-fs: 12px;
+  --tb-bg: #2b2b2b; --tb-fg: #fff;
+  --frame-bg: #fff; --frame-fg: #111;
+  --frame-border: 1px solid #6d6d6d; --frame-radius: 0;
+  --win-shadow: 0 6px 18px rgba(0,0,0,.4); --btn-size: 20px;
+  --btn-bg: #2b2b2b; --btn-fg: #fff;
+  --bar-h: 36px; --bar-bg: #1f1f1f; --bar-fg: #eee;
+  --menu-bg: #2b2b2b; --menu-fg: #eee; --menu-border: none; --menu-hover: rgba(255,255,255,.14);
+  --icon-fg: #fff; --icon-shadow: 0 1px 3px #000;
+  --task-bg: rgba(255,255,255,.08); --task-fg: #eee;
+  --body-bg: #fff; --body-fg: #111;
+}
+.desk.chrome-win8 .bar .startbtn { min-width: 34px; padding: 0 7px; }
+.desk.chrome-win8 .bar .startbtn span { display: none; }
+
+/* Windows 10 扁平 + 毛玻璃菜单 */
+.desk.chrome-win10 {
+  --tb-h: 30px; --tb-fs: 12px;
+  --tb-bg: #ffffff; --tb-fg: #1c1c1c;
+  --frame-bg: #fff; --frame-fg: #1c1c1c;
+  --frame-border: 1px solid #d6d6d6; --frame-radius: 0;
+  --win-shadow: 0 10px 26px rgba(0,0,0,.32); --btn-size: 22px;
+  --btn-bg: transparent; --btn-fg: #333;
+  --bar-h: 40px; --bar-bg: rgba(18,18,22,.86); --bar-fg: #f2f2f4;
+  --menu-bg: rgba(32,32,36,.78); --menu-fg: #fff; --menu-border: 1px solid rgba(255,255,255,.12);
+  --menu-radius: 6px; --menu-hover: rgba(255,255,255,.12);
+  --icon-fg: #fff; --icon-shadow: 0 1px 3px rgba(0,0,0,.85);
+  --start-bg: transparent; --start-fg: #fff;
+  --task-bg: rgba(255,255,255,.05); --task-fg: #e8e8ec;
+  --body-bg: #fff; --body-fg: #1c1c1c;
+}
+.desk.chrome-win10 .bar .startbtn .slogo { filter: brightness(0) invert(1); }
+.desk.chrome-win10 .win .tbar { border-bottom: 1px solid #e2e2e6; }
+.desk.chrome-win10 .win .wbtn.x:hover { background: #e81123; color: #fff; }
+
+/* Windows 11 */
+.desk.chrome-win11 {
+  --tb-h: 32px; --tb-fs: 12px;
+  --tb-bg: #f3f3f3; --tb-fg: #1a1a1a;
+  --frame-bg: #f9f9f9; --frame-fg: #1a1a1a;
+  --frame-border: 1px solid #dcdcdc; --frame-radius: 8px;
+  --win-shadow: 0 16px 40px rgba(0,0,0,.34); --btn-size: 30px;
+  --btn-bg: transparent; --btn-fg: #2a2a2a;
+  --bar-h: 46px; --bar-bg: rgba(243,243,243,.82); --bar-fg: #1a1a1a;
+  --menu-bg: rgba(40,40,44,.86); --menu-fg: #fff; --menu-border: 1px solid rgba(255,255,255,.1);
+  --menu-radius: 10px; --menu-hover: rgba(255,255,255,.08);
+  --icon-fg: #fff; --icon-shadow: 0 1px 3px rgba(0,0,0,.85);
+  --start-bg: transparent; --start-fg: #1a1a1a;
+  --task-bg: transparent; --task-fg: #1a1a1a;
+  --body-bg: #fff; --body-fg: #1a1a1a;
+}
+.desk.chrome-win11 .bar { justify-content: center; }
+.desk.chrome-win11 .bar .startbtn { order: 2; }
+.desk.chrome-win11 .bar .tasks { order: 3; flex: 0 1 auto; justify-content: center; }
+.desk.chrome-win11 .bar .tray { order: 4; margin-left: 0; }
+.desk.chrome-win11 .bar::after { content: ""; flex: 1 1 auto; order: 1; }
+.desk.chrome-win11 .bar::before { content: ""; flex: 1 1 auto; order: 5; }
+.desk.chrome-win11 .bar .task { border: none; background: rgba(255,255,255,.55); border-radius: 4px; }
+.desk.chrome-win11 .win .wbtn.x:hover { background: #c42b1c; color: #fff; }
+
+/* Windows Phone */
+.desk.chrome-wp, .desk.chrome-wp7 { --tb-h: 0; --bar-h: 0; --icon-fg: #fff; }
+
+/* Mac System 1–7：一位色针纹标题栏 */
+.desk.chrome-macclassic {
+  --tb-h: 18px; --tb-fs: 11px; --tb-bg: #fff; --tb-fg: #000;
+  --frame-bg: #fff; --frame-fg: #000;
+  --frame-border: 1px solid #000; --frame-radius: 0;
+  --win-shadow: 1px 1px 0 #000; --btn-size: 12px; --btn-bg: #fff; --btn-fg: #000;
+  --bar-h: 26px; --menubar-bg: #fff; --menubar-fg: #000;
+  --menu-bg: #fff; --menu-fg: #000; --menu-border: 1px solid #000; --menu-hover: #000;
+  --menu-hover-fg: #fff;
+  --icon-fg: #000; --icon-shadow: none;
+  --body-bg: #fff; --body-fg: #000;
+  --title-align: center;
+}
+.desk.chrome-macclassic .win .tbar {
+  background-image: repeating-linear-gradient(180deg, #000 0 1px, #fff 1px 2px);
+  border-bottom: 1px solid #000;
+}
+.desk.chrome-macclassic .win .tbar .tname {
+  background: #fff; padding: 0 8px; font-weight: 400;
+}
+.desk.chrome-macclassic .win .wbtn { display: none; }
+
+/* Mac OS 8/9 Platinum */
+.desk.chrome-platinum {
+  --tb-h: 19px; --tb-fs: 11px; --tb-bg: #dddddd; --tb-fg: #000;
+  --frame-bg: #dddddd; --frame-fg: #000;
+  --frame-border: 1px solid #555; --frame-radius: 0;
+  --win-shadow: 2px 2px 0 rgba(0,0,0,.3); --btn-size: 13px; --btn-bg: #dddddd; --btn-fg: #000;
+  --bar-h: 24px; --menubar-bg: #eee; --menubar-fg: #000;
+  --menu-bg: #eee; --menu-fg: #000; --menu-border: 1px solid #555; --menu-hover: #3366cc;
+  --icon-fg: #000; --icon-shadow: none;
+  --body-bg: #fff; --body-fg: #000;
+  --title-align: center;
+}
+.desk.chrome-platinum .win .tbar {
+  background-image: repeating-linear-gradient(180deg, #cfcfcf 0 1px, #eeeeee 1px 2px);
+  border-bottom: 1px solid #888;
+}
+
+/* Aqua 10.0 – 10.8 */
+.desk.chrome-aqua {
+  --tb-h: 22px; --tb-fs: 11.5px; --tb-bg: #d9dde4; --tb-fg: #222;
+  --frame-bg: #eef0f4; --frame-fg: #1a1a1a;
+  --frame-border: 1px solid #8f9aa8; --frame-radius: 10px 10px 2px 2px;
+  --win-shadow: 0 12px 30px rgba(0,0,0,.45); --btn-size: 13px;
+  --bar-h: 24px; --menubar-bg: rgba(250,250,252,.88); --menubar-fg: #111;
+  --menu-bg: rgba(250,250,252,.96); --menu-fg: #111; --menu-border: 1px solid #a0a8b4;
+  --menu-hover: #3b6fd4; --menu-hover-fg: #fff;
+  --icon-fg: #fff; --icon-shadow: 0 1px 3px rgba(0,0,0,.7);
+  --dock-bg: rgba(240,245,250,.45);
+  --body-bg: #fff; --body-fg: #111;
+  --title-align: center;
+}
+.desk.chrome-aqua .win .tbar {
+  background-image: linear-gradient(180deg, #f7f9fb 0%, #dfe4eb 50%, #cfd6df 100%);
+}
+.desk.chrome-aqua .win .wbtns { order: -1; }
+.desk.chrome-aqua .win .wbtn { display: none; }
+.desk.chrome-aqua .win .tbar .lights { display: flex; gap: 5px; margin-right: 6px; }
+
+/* OS X Mavericks 之后的扁平 Aqua */
+.desk.chrome-aqua-flat {
+  --tb-h: 26px; --tb-fs: 12px; --tb-bg: #ececec; --tb-fg: #222;
+  --frame-bg: #f6f6f6; --frame-fg: #1a1a1a;
+  --frame-border: 1px solid #c9c9c9; --frame-radius: 6px;
+  --win-shadow: 0 10px 28px rgba(0,0,0,.3); --btn-size: 13px;
+  --bar-h: 24px; --menubar-bg: rgba(252,252,252,.94); --menubar-fg: #111;
+  --menu-bg: rgba(250,250,250,.98); --menu-fg: #111; --menu-border: 1px solid #b8b8b8;
+  --menu-hover: #0a60d0; --menu-hover-fg: #fff;
+  --icon-fg: #fff; --icon-shadow: 0 1px 3px rgba(0,0,0,.7);
+  --dock-bg: rgba(255,255,255,.28);
+  --body-bg: #fff; --body-fg: #111;
+  --title-align: center;
+}
+.desk.chrome-aqua-flat .win .wbtns { order: -1; }
+.desk.chrome-aqua-flat .win .wbtn { display: none; }
+
+/* macOS 现代 */
+.desk.chrome-macos {
+  --tb-h: 28px; --tb-fs: 12.5px; --tb-bg: rgba(246,246,248,.92); --tb-fg: #1c1c1e;
+  --frame-bg: #fff; --frame-fg: #1c1c1e;
+  --frame-border: 1px solid rgba(0,0,0,.18); --frame-radius: 10px;
+  --win-shadow: 0 22px 50px rgba(0,0,0,.36); --btn-size: 13px;
+  --bar-h: 26px; --menubar-bg: rgba(250,250,252,.8); --menubar-fg: #111;
+  --menu-bg: rgba(250,250,252,.98); --menu-fg: #111; --menu-border: 1px solid rgba(0,0,0,.16);
+  --menu-hover: #0a60d0; --menu-hover-fg: #fff;
+  --icon-fg: #fff; --icon-shadow: 0 1px 4px rgba(0,0,0,.7);
+  --dock-bg: rgba(255,255,255,.22);
+  --body-bg: #fff; --body-fg: #1c1c1e;
+  --title-align: center;
+}
+.desk.chrome-macos .win .wbtns { order: -1; }
+.desk.chrome-macos .win .wbtn { display: none; }
+.desk.chrome-macos .menubar {
+  background: var(--menubar-bg);
+  backdrop-filter: blur(22px) saturate(1.5);
+  -webkit-backdrop-filter: blur(22px) saturate(1.5);
+  border-bottom: 1px solid rgba(0,0,0,.14);
+  box-shadow: 0 1px 0 rgba(255,255,255,.55) inset;
+}
+.desk.chrome-macos .menubar .mt { font-size: 12.5px; }
+.desk.chrome-macos .menubar .mt.bold { font-weight: 600; }
+
+/* iOS / Android / 各家 ROM：窗口不参与，仅给应用页用 */
+.desk.chrome-ios1, .desk.chrome-ios3, .desk.chrome-ios6, .desk.chrome-ios7, .desk.chrome-ios17,
+.desk.chrome-android-old, .desk.chrome-android-holo, .desk.chrome-android-kk,
+.desk.chrome-android-material, .desk.chrome-android10, .desk.chrome-android14,
+.desk.chrome-miui, .desk.chrome-hyperos, .desk.chrome-oneui, .desk.chrome-coloros,
+.desk.chrome-harmony, .desk.chrome-yunos, .desk.chrome-meego, .desk.chrome-maemo,
+.desk.chrome-asha, .desk.chrome-symbian3 {
+  --tb-h: 0px; --bar-h: 0px;
+}
+
+/* ChromeOS */
+.desk.chrome-chromeos {
+  --tb-h: 28px; --tb-fs: 12px; --tb-bg: #e8eaee; --tb-fg: #202124;
+  --frame-bg: #fff; --frame-fg: #202124;
+  --frame-border: 1px solid #d3d6db; --frame-radius: 8px;
+  --win-shadow: 0 12px 30px rgba(0,0,0,.3); --btn-size: 22px;
+  --bar-h: 40px; --bar-bg: rgba(240,242,245,.86); --bar-fg: #202124;
+  --menu-bg: #fff; --menu-fg: #202124; --menu-border: 1px solid #d8dbe0; --menu-radius: 8px;
+  --menu-hover: rgba(26,115,232,.12);
+  --icon-fg: #fff; --icon-shadow: 0 1px 3px rgba(0,0,0,.7);
+  --body-bg: #fff; --body-fg: #202124;
+}
+
+/* Linux：GNOME */
+.desk.chrome-gnome, .desk.chrome-mint {
+  --tb-h: 32px; --tb-fs: 12px; --tb-bg: #ededed; --tb-fg: #1a1a1a;
+  --frame-bg: #fafafa; --frame-fg: #1a1a1a;
+  --frame-border: 1px solid #cfcfcf; --frame-radius: 8px;
+  --win-shadow: 0 12px 32px rgba(0,0,0,.28); --btn-size: 26px;
+  --btn-bg: transparent; --btn-fg: #333;
+  --bar-h: 30px; --bar-bg: rgba(24,24,28,.9); --bar-fg: #eee;
+  --menu-bg: rgba(28,28,32,.96); --menu-fg: #eee; --menu-border: 1px solid rgba(255,255,255,.1);
+  --menu-radius: 10px; --menu-hover: rgba(255,255,255,.1);
+  --icon-fg: #fff; --icon-shadow: 0 1px 3px rgba(0,0,0,.8);
+  --dock-bg: rgba(255,255,255,.16);
+  --body-bg: #fff; --body-fg: #1a1a1a;
+}
+.desk.chrome-gnome-dark, .desk.chrome-steam {
+  --tb-h: 32px; --tb-fs: 12px; --tb-bg: #2a2a2e; --tb-fg: #e6e6ea;
+  --frame-bg: #1e1e22; --frame-fg: #e6e6ea;
+  --frame-border: 1px solid #3a3a40; --frame-radius: 8px;
+  --win-shadow: 0 14px 34px rgba(0,0,0,.6); --btn-size: 26px;
+  --btn-bg: transparent; --btn-fg: #ddd;
+  --bar-h: 30px; --bar-bg: rgba(10,10,14,.94); --bar-fg: #eee;
+  --menu-bg: rgba(24,24,28,.97); --menu-fg: #eee; --menu-border: 1px solid rgba(255,255,255,.12);
+  --menu-radius: 10px; --menu-hover: rgba(255,255,255,.1);
+  --icon-fg: #fff; --icon-shadow: 0 1px 3px #000;
+  --dock-bg: rgba(255,255,255,.1);
+  --body-bg: #1b1b1f; --body-fg: #e6e6ea;
+}
+
+/* deepin / UOS */
+.desk.chrome-deepin {
+  --tb-h: 34px; --tb-fs: 12px; --tb-bg: #f4f6f9; --tb-fg: #1a1a1a;
+  --frame-bg: #ffffff; --frame-fg: #1a1a1a;
+  --frame-border: none; --frame-radius: 12px;
+  --win-shadow: 0 18px 44px rgba(0,10,30,.3); --btn-size: 26px;
+  --btn-bg: transparent; --btn-fg: #444;
+  --bar-h: 34px; --bar-bg: rgba(246,248,251,.86); --bar-fg: #1a1a1a;
+  --menu-bg: rgba(248,250,253,.95); --menu-fg: #1a1a1a; --menu-border: 1px solid rgba(0,0,0,.08);
+  --menu-radius: 12px; --menu-hover: rgba(0,140,255,.14);
+  --icon-fg: #fff; --icon-shadow: 0 1px 4px rgba(0,0,0,.7);
+  --dock-bg: rgba(255,255,255,.42);
+  --body-bg: #fff; --body-fg: #1a1a1a;
+}
+
+/* Unity */
+.desk.chrome-unity {
+  --tb-h: 30px; --tb-fs: 12px; --tb-bg: #e8e8e8; --tb-fg: #1a1a1a;
+  --frame-bg: #f6f6f6; --frame-fg: #1a1a1a;
+  --frame-border: 1px solid #c8c8c8; --frame-radius: 6px;
+  --win-shadow: 0 10px 26px rgba(0,0,0,.3); --btn-size: 24px;
+  --bar-h: 26px; --bar-bg: rgba(20,20,24,.92); --bar-fg: #eee;
+  --menu-bg: rgba(30,30,34,.96); --menu-fg: #eee; --menu-border: 1px solid rgba(255,255,255,.1);
+  --menu-hover: rgba(255,255,255,.12);
+  --icon-fg: #fff; --icon-shadow: 0 1px 3px #000;
+  --dock-bg: rgba(30,30,34,.9);
+  --body-bg: #fff; --body-fg: #1a1a1a;
+}
+
+/* KDE */
+.desk.chrome-kde {
+  --tb-h: 30px; --tb-fs: 12px; --tb-bg: #e6e9ef; --tb-fg: #1a1a1a;
+  --frame-bg: #eff1f5; --frame-fg: #1a1a1a;
+  --frame-border: 1px solid #b8bfc7; --frame-radius: 6px;
+  --win-shadow: 0 10px 26px rgba(0,0,0,.35); --btn-size: 22px;
+  --bar-h: 36px; --bar-bg: #eff1f5; --bar-fg: #1a1a1a;
+  --menu-bg: #eff1f5; --menu-fg: #1a1a1a; --menu-border: 1px solid #b8bfc7; --menu-radius: 4px;
+  --menu-hover: #3daee9; --menu-hover-fg: #fff;
+  --icon-fg: #fff; --icon-shadow: 0 1px 3px #000;
+  --body-bg: #fff; --body-fg: #1a1a1a;
+}
+
+/* Arch：平铺，无边框 */
+.desk.chrome-tiled {
+  --tb-h: 20px; --tb-fs: 11px; --tb-bg: #1f1f22; --tb-fg: #d8d8dc;
+  --frame-bg: #111114; --frame-fg: #d8d8dc;
+  --frame-border: 1px solid #2e2e34; --frame-radius: 0;
+  --win-shadow: none; --btn-size: 16px;
+  --bar-h: 0px; --menu-bg: #1a1a1e; --menu-fg: #ddd; --menu-border: 1px solid #333;
+  --icon-fg: #ddd; --icon-shadow: none;
+  --body-bg: #0e0e11; --body-fg: #cdd3d8;
+}
+.desk.chrome-tiled .win .wbtn.x { background: #3a1f1f; }
+
+/* OS/2 Workplace Shell */
+.desk.chrome-wps {
+  --tb-h: 24px; --tb-fs: 11.5px; --tb-bg: #0b4f8a; --tb-fg: #fff;
+  --frame-bg: #cdcdcd; --frame-fg: #000;
+  --frame-border: 2px outset #e8e8e8; --frame-radius: 0;
+  --win-shadow: 3px 3px 5px rgba(0,0,0,.4); --btn-size: 16px;
+  --btn-bg: #cdcdcd; --btn-fg: #000;
+  --bar-h: 32px; --bar-bg: #cdcdcd; --bar-fg: #000;
+  --menu-bg: #cdcdcd; --menu-fg: #000; --menu-border: 2px outset #e8e8e8; --menu-hover: #0b4f8a;
+  --icon-fg: #fff; --icon-shadow: 0 1px 2px #000;
+  --task-bg: #cdcdcd; --task-fg: #000;
+  --body-bg: #fff; --body-fg: #000;
+}
+
+/* BeOS：黄色标签页 */
+.desk.chrome-beos {
+  --tb-h: 0px; --tb-fs: 12px; --tb-bg: #dcdcdc; --tb-fg: #111;
+  --frame-bg: #d6d6d6; --frame-fg: #111;
+  --frame-border: 1px solid #8a8a8a; --frame-radius: 0;
+  --win-shadow: 3px 3px 8px rgba(0,0,0,.45); --btn-size: 14px;
+  --btn-bg: #ffd000; --btn-fg: #000;
+  --bar-h: 26px; --bar-bg: #dcdcdc; --bar-fg: #111;
+  --menu-bg: #dcdcdc; --menu-fg: #111; --menu-border: 1px solid #8a8a8a; --menu-hover: #3b6ea5;
+  --icon-fg: #fff; --icon-shadow: 0 1px 2px #000;
+  --body-bg: #ededed; --body-fg: #111;
+}
+.desk.chrome-beos .win { overflow: visible; margin-top: 20px; }
+.desk.chrome-beos .win .tbar {
+  position: absolute; top: -20px; left: 0; right: auto;
+  width: auto; height: 20px; padding: 0 10px;
+  background: #ffd000; color: #000;
+  border-radius: 4px 4px 0 0;
+  min-width: 120px;
+}
+.desk.chrome-beos .win .tbar .tname { font-size: 11px; font-weight: 600; }
+.desk.chrome-beos .win .tbar .ticon { width: 12px; height: 12px; }
+.desk.chrome-beos .win .tbar .wbtns { margin-left: 14px; }
+
+/* NeXTSTEP：黑底、浅灰标题 */
+.desk.chrome-next {
+  --tb-h: 22px; --tb-fs: 12px; --tb-bg: #8c8c8c; --tb-fg: #000;
+  --frame-bg: #d0d0d0; --frame-fg: #000;
+  --frame-border: 1px solid #000; --frame-radius: 0;
+  --win-shadow: 4px 4px 0 rgba(0,0,0,.6); --btn-size: 15px;
+  --btn-bg: #b8b8b8; --btn-fg: #000;
+  --bar-h: 0px;
+  --menu-bg: #d0d0d0; --menu-fg: #000; --menu-border: 1px solid #000; --menu-hover: #000;
+  --menu-hover-fg: #fff;
+  --icon-fg: #fff; --icon-shadow: 0 1px 2px #000;
+  --body-bg: #fff; --body-fg: #000;
+}
+.desk.chrome-next .win .wbtns { margin-left: auto; }
+
+/* rio（Plan 9）：无装饰，只有一个标签条 */
+.desk.chrome-rio {
+  --tb-h: 16px; --tb-fs: 11px; --tb-bg: #5b8db8; --tb-fg: #f4f4f4;
+  --frame-bg: #7fa6c9; --frame-fg: #111;
+  --frame-border: 1px solid #35597d; --frame-radius: 0;
+  --win-shadow: none; --btn-size: 0;
+  --bar-h: 0px;
+  --menu-bg: #bccfdf; --menu-fg: #000; --menu-border: 1px solid #35597d;
+  --menu-hover: #5b8db8; --menu-hover-fg: #fff;
+  --icon-fg: #000; --icon-shadow: none;
+  --body-bg: #dfe7ee; --body-fg: #111;
+}
+.desk.chrome-rio .win .wbtn { display: none; }
+.desk.chrome-rio .win .tbar { cursor: default; }
+
+/* Amiga Workbench */
+.desk.chrome-amiga {
+  --tb-h: 18px; --tb-fs: 11px; --tb-bg: #e8e8e8; --tb-fg: #000;
+  --frame-bg: #0055aa; --frame-fg: #fff;
+  --frame-border: 2px solid #fff; --frame-radius: 0;
+  --win-shadow: 2px 2px 0 #000; --btn-size: 14px;
+  --btn-bg: #e8e8e8; --btn-fg: #000;
+  --bar-h: 0px;
+  --menu-bg: #e8e8e8; --menu-fg: #000; --menu-border: 1px solid #000; --menu-hover: #ff8a00;
+  --icon-fg: #fff; --icon-shadow: none;
+  --body-bg: #0055aa; --body-fg: #fff;
+}
+.desk.chrome-amiga .win .tbody { background: #fff; color: #000; }
+.desk.chrome-amiga .win .tbar { border-bottom: 2px solid #000; }
+
+/* RISC OS */
+.desk.chrome-riscos {
+  --tb-h: 20px; --tb-fs: 11px; --tb-bg: #e0e0d0; --tb-fg: #000;
+  --frame-bg: #e0e0d0; --frame-fg: #000;
+  --frame-border: 2px solid #888; --frame-radius: 0;
+  --win-shadow: 1px 1px 0 #000; --btn-size: 15px;
+  --btn-bg: #c8c8b8; --btn-fg: #000;
+  --bar-h: 26px; --bar-bg: #e0e0d0; --bar-fg: #000;
+  --menu-bg: #e0e0d0; --menu-fg: #000; --menu-border: 2px solid #888; --menu-hover: #6b8e23;
+  --icon-fg: #fff; --icon-shadow: 0 1px 2px #000;
+  --body-bg: #f2f2e8; --body-fg: #000;
+}
+
+/* Xerox Alto / Star */
+.desk.chrome-alto {
+  --tb-h: 20px; --tb-fs: 11px; --tb-bg: #d8d8d8; --tb-fg: #000;
+  --frame-bg: #f0f0f0; --frame-fg: #000;
+  --frame-border: 1px solid #555; --frame-radius: 0;
+  --win-shadow: 2px 2px 0 rgba(0,0,0,.4); --btn-size: 14px;
+  --bar-h: 0px;
+  --menu-bg: #e8e8e8; --menu-fg: #000; --menu-border: 1px solid #555;
+  --icon-fg: #000; --icon-shadow: none;
+  --body-bg: #fff; --body-fg: #000;
+}
+
+/* IRIX / Indigo Magic */
+.desk.chrome-irix {
+  --tb-h: 26px; --tb-fs: 11.5px; --tb-bg: #6e7f95; --tb-fg: #fff;
+  --frame-bg: #c3ccd6; --frame-fg: #111;
+  --frame-border: 2px solid #38495c; --frame-radius: 2px;
+  --win-shadow: 4px 4px 0 rgba(0,0,0,.35); --btn-size: 17px;
+  --btn-bg: #96a7ba; --btn-fg: #10202f;
+  --bar-h: 36px; --bar-bg: #c3ccd6; --bar-fg: #111;
+  --menu-bg: #c3ccd6; --menu-fg: #111; --menu-border: 2px solid #38495c; --menu-hover: #3f5f8f;
+  --icon-fg: #fff; --icon-shadow: 0 1px 2px #000;
+  --body-bg: #e6ebf1; --body-fg: #111;
+}
+
+/* CDE（Solaris） */
+.desk.chrome-cde {
+  --tb-h: 24px; --tb-fs: 11.5px; --tb-bg: #5a7ca6; --tb-fg: #fff;
+  --frame-bg: #a9b8c8; --frame-fg: #000;
+  --frame-border: 2px solid #2c4462; --frame-radius: 0;
+  --win-shadow: 3px 3px 0 rgba(0,0,0,.4); --btn-size: 16px;
+  --btn-bg: #8fa4ba; --btn-fg: #08203a;
+  --bar-h: 40px; --bar-bg: #a9b8c8; --bar-fg: #000;
+  --menu-bg: #a9b8c8; --menu-fg: #000; --menu-border: 2px solid #2c4462; --menu-hover: #2c4462;
+  --icon-fg: #fff; --icon-shadow: 0 1px 2px #000;
+  --body-bg: #dfe6ee; --body-fg: #000;
+}
+
+/* QNX Photon */
+.desk.chrome-photon {
+  --tb-h: 24px; --tb-fs: 11.5px; --tb-bg: #6f8b93; --tb-fg: #fff;
+  --frame-bg: #c6d2d4; --frame-fg: #0a1a1c;
+  --frame-border: 2px solid #33505a; --frame-radius: 3px;
+  --win-shadow: 3px 3px 0 rgba(0,0,0,.4); --btn-size: 17px;
+  --btn-bg: #9fb3b8; --btn-fg: #0a1a1c;
+  --bar-h: 36px; --bar-bg: #c6d2d4; --bar-fg: #0a1a1c;
+  --menu-bg: #c6d2d4; --menu-fg: #0a1a1c; --menu-border: 2px solid #33505a; --menu-hover: #0f6e8c;
+  --icon-fg: #fff; --icon-shadow: 0 1px 2px #000;
+  --body-bg: #eef4f5; --body-fg: #0a1a1c;
+}
+
+/* 终端 */
+.desk.chrome-terminal {
+  --tb-h: 0; --bar-h: 0; --icon-fg: #c0c0c0;
+}
+.term {
+  position: absolute; inset: 0; z-index: 3;
+  background: #000;
+  padding: 16px 18px;
+  font-family: monospace;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--accent, #c0c0c0);
+  overflow: hidden;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+.term .cur {
+  display: inline-block; width: 8px; height: 15px;
+  background: var(--accent, #c0c0c0);
+  vertical-align: -2px;
+  animation: blink 1s steps(1) infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+.term .ttyhint {
+  position: absolute; right: 12px; bottom: 10px;
+  font-size: 10px; color: #4a4a52; letter-spacing: .1em;
+}
+
+/* ------------------------ 手机界面 ------------------------ */
+
+.phoneui {
+  position: absolute; inset: 0;
+  z-index: 3;
+  display: flex; flex-direction: column;
+  overflow: hidden;
+  color: #fff;
+}
+.statusbar {
+  flex: 0 0 auto;
+  height: 30px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 18px 0 22px;
+  font-size: 11.5px;
+  font-weight: 600;
+  z-index: 10;
+  position: relative;
+}
+.statusbar .sright { display: flex; align-items: center; gap: 7px; }
+.statusbar .bat { width: 21px; height: 10px; border: 1px solid currentColor; border-radius: 2px; position: relative; opacity: .9; }
+.statusbar .bat::after { content: ""; position: absolute; inset: 1px; right: 6px; background: currentColor; }
+.statusbar .sig { letter-spacing: -1px; font-size: 10px; }
+
+.ph-main { flex: 1 1 auto; position: relative; overflow: hidden; }
+.ph-grid {
+  position: absolute; inset: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: min-content;
+  gap: 20px 8px;
+  padding: 26px 18px;
+  align-content: start;
+}
+.ph-app { display: flex; flex-direction: column; align-items: center; gap: 7px; cursor: default; }
+.ph-app .ic { width: 50px; height: 50px; display: grid; place-items: center; }
+.ph-app .ic img { width: 100%; height: 100%; object-fit: contain; }
+.ph-app .ic.miss { border-radius: 12px; border: 1px dashed rgba(255,255,255,.4); background: rgba(0,0,0,.35); color: #fff; font-size: 9px; text-align: center; }
+.ph-app .nm { font-size: 10.5px; text-shadow: 0 1px 2px rgba(0,0,0,.8); }
+.ph-app:active { transform: scale(.94); }
+
+.ph-dock {
+  flex: 0 0 auto;
+  margin: 0 10px 10px;
+  height: 62px;
+  border-radius: 26px;
+  background: rgba(255,255,255,.16);
+  backdrop-filter: blur(22px) saturate(1.5);
+  -webkit-backdrop-filter: blur(22px) saturate(1.5);
+  border: 1px solid rgba(255,255,255,.2);
+  display: flex; align-items: center; justify-content: space-around;
+  z-index: 12;
+}
+.ph-dock .ditem { width: 44px; height: 44px; display: grid; place-items: center; }
+.ph-dock .ditem img { width: 100%; height: 100%; object-fit: contain; }
+
+/* 应用页 */
+.appview {
+  position: absolute; inset: 0; z-index: 40;
+  display: flex; flex-direction: column;
+  background: rgba(14,14,18,.96);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  animation: appIn .22s ease;
+}
+@keyframes appIn { from { transform: scale(.94); opacity: .4; } to { transform: none; opacity: 1; } }
+.appview .avbar {
+  flex: 0 0 auto; height: 46px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 14px;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  font-size: 13px; font-weight: 600;
+}
+.appview .avbar button {
+  background: none; border: none; color: var(--accent, #4c9aff);
+  font-size: 13px; cursor: pointer; font-family: inherit;
+}
+.appview .avbody {
+  flex: 1 1 auto; padding: 18px; color: #e6e6ea; font-size: 13px; line-height: 1.9;
+  overflow: auto;
+}
+.appview .avicon { width: 64px; height: 64px; margin: 0 auto 14px; display: block; }
+
+/* iOS 风格 */
+.desk.chrome-ios1 .ph-app .ic, .desk.chrome-ios3 .ph-app .ic,
+.desk.chrome-ios6 .ph-app .ic, .desk.chrome-ios7 .ph-app .ic,
+.desk.chrome-ios17 .ph-app .ic { border-radius: 12px; overflow: hidden; }
+.desk.chrome-ios6 .ph-app .ic { border-radius: 12px; box-shadow: inset 0 -2px 6px rgba(0,0,0,.35), 0 1px 0 rgba(255,255,255,.35); }
+.desk.chrome-ios6 .ph-dock { background: rgba(255,255,255,.42); border-radius: 18px; }
+.desk.chrome-ios7 .ph-app .nm, .desk.chrome-ios17 .ph-app .nm { font-weight: 400; }
+.desk.chrome-ios1 .statusbar { background: linear-gradient(180deg, rgba(0,0,0,.5), rgba(0,0,0,.15)); }
+
+/* 安卓各家 */
+.desk.chrome-android-old .ph-app .ic { border-radius: 6px; }
+.desk.chrome-android-holo .ph-app .ic { border-radius: 4px; }
+.desk.chrome-android-kk .ph-app .ic { border-radius: 8px; }
+.desk.chrome-android-material .ph-app .ic, .desk.chrome-android10 .ph-app .ic,
+.desk.chrome-android14 .ph-app .ic { border-radius: 14px; }
+.desk.chrome-miui .ph-app .ic, .desk.chrome-hyperos .ph-app .ic,
+.desk.chrome-oneui .ph-app .ic, .desk.chrome-coloros .ph-app .ic,
+.desk.chrome-harmony .ph-app .ic, .desk.chrome-yunos .ph-app .ic { border-radius: 16px; }
+.desk.chrome-oneui .ph-grid { padding-top: 16px; }
+.desk.chrome-miui .ph-dock, .desk.chrome-hyperos .ph-dock { border-radius: 30px; }
+.desk.chrome-coloros .ph-dock { background: rgba(0,0,0,.32); }
+
+/* 状态栏配色差异 */
+.desk.chrome-ios17 .statusbar, .desk.chrome-ios7 .statusbar { color: #fff; }
+.desk.chrome-android-old .statusbar { background: rgba(0,0,0,.55); }
+.desk.chrome-android-material .statusbar { background: rgba(0,0,0,.28); }
+.desk.chrome-miui .statusbar { background: rgba(0,0,0,.18); }
+
+/* ------------------------ 诺基亚界面 ------------------------ */
+
+.nokiaui {
+  position: absolute; inset: 0;
+  z-index: 3;
+  background: #c8d0b8;
+  color: #0e1a10;
+  display: flex; flex-direction: column;
+  font-family: var(--ui-font, 'Nokia Sans', sans-serif);
+  overflow: hidden;
+}
+.nokiaui .nstatus {
+  flex: 0 0 auto;
+  height: 22px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 6px;
+  font-size: 10px;
+  border-bottom: 1px solid rgba(0,0,0,.18);
+}
+.nokiaui .nstatus .sig { letter-spacing: -1px; }
+.nokiaui .nmain { flex: 1 1 auto; overflow: hidden; position: relative; }
+.nokiaui .nmain .ntitle {
+  padding: 7px 8px 5px;
+  font-size: 11.5px; font-weight: 700;
+  border-bottom: 1px solid rgba(0,0,0,.2);
+}
+.nokiaui .ngrid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 6px 4px; padding: 9px 7px;
+}
+.nokiaui .ncell {
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  padding: 5px 2px;
+}
+.nokiaui .ncell .ic { width: 30px; height: 30px; }
+.nokiaui .ncell .ic img { width: 100%; height: 100%; object-fit: contain; }
+.nokiaui .ncell .ic.miss { border: 1px dashed #6a7a6a; font-size: 8px; display: grid; place-items: center; }
+.nokiaui .ncell span { font-size: 9px; text-align: center; }
+.nokiaui .ncell.on { background: rgba(0,60,20,.22); outline: 1px solid rgba(0,60,20,.45); }
+.nokiaui .nsoft {
+  flex: 0 0 auto;
+  height: 18px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 6px;
+  font-size: 9.5px;
+  border-top: 1px solid rgba(0,0,0,.2);
+}
+.nokiaui .ndetail { padding: 10px 9px; font-size: 10.5px; line-height: 1.6; }
+.nokiaui .nlist .row {
+  padding: 5px 8px; font-size: 10.5px;
+  border-bottom: 1px solid rgba(0,0,0,.12);
+}
+
+/* 诺基亚彩色型号（S40 / Asha）用浅色机身屏 */
+.desk.chrome-s40 .nokiaui, .desk.chrome-asha .nokiaui { background: #dfe6dd; }
+
+/* ------------------------ 主屏专用（无窗口） ------------------------ */
+
+.desktop-note {
+  position: absolute;
+  left: 50%; bottom: 18px; transform: translateX(-50%);
+  z-index: 44;
+  font-size: 10.5px;
+  color: rgba(255,255,255,.72);
+  background: rgba(0,0,0,.42);
+  padding: 4px 10px;
+  border-radius: 3px;
+  letter-spacing: .04em;
+  pointer-events: none;
+}
+
+/* 任务栏高亮 */
+.bar.bottom { --task-on-bg: rgba(255,255,255,.34); }
+
+/* 缺图标占位：统一尺寸约束，禁止文字撑爆 */
+.ic.miss {
+  display: grid; place-items: center;
+  overflow: hidden;
+  font-size: 8px; line-height: 1;
+  white-space: nowrap;
+  letter-spacing: 0;
+  color: #d8bf86;
+}
+.ic.miss.tiny { font-size: 9px; }
+/* Win95 / 98 开始按钮：经典 3D 凸起 */
+.desk.chrome-win95 .bar .startbtn,
+.desk.chrome-win2000 .bar .startbtn {
+  border: 2px outset #dfdfdf;
+  background: #c0c0c0;
+  color: #000;
+  font-weight: 700;
+  padding: 0 10px;
+}
+.desk.chrome-win95 .bar .task,
+.desk.chrome-win2000 .bar .task { border: 2px outset #dfdfdf; }
+.desk.chrome-win95 .bar { border-top: 1px solid #fff; }
